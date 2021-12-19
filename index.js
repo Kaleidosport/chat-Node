@@ -12,9 +12,11 @@ const MONGO_DB = process.env.MONGO_DB
 
 const APP = EXPRESS()
 
-// require("./Models/users")(APP)
+require("./Models/users")(APP)
 
 MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`)
+        .then(() => console.log(`Authentication successful.`))
+        .catch(error => console.error(`Unexpected error.`, error))
 
 const PORT = 5000
 
@@ -25,3 +27,13 @@ APP.get("/", (req, res) => {
 APP.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}.`)
 })
+
+/* Where we at: 
+ *
+ * https://expressjs.com/en/starter/hello-world.html
+ * https://www.npmjs.com/package/mongoose
+ * https://nodejs.org/en/docs/
+ * https://socket.io/get-started/chat/
+ * https://docs.mongodb.com/
+ * 
+ */
