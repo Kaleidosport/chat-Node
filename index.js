@@ -2,7 +2,8 @@
 
 const MONGOOSE = require("mongoose")
 const EXPRESS = require("express")
-const SOCKET = require("socket.io")
+const { Server } = require("socket.io")
+const HTTP = require("http")
 
 require("dotenv").config()
 
@@ -11,6 +12,8 @@ const MONGO_PW = process.env.MONGO_PW
 const MONGO_DB = process.env.MONGO_DB
 
 const APP = EXPRESS()
+const SERVER = HTTP.createServer(APP)
+const IO = new Server(SERVER)
 
 require("./Models/users")(APP)
 
@@ -21,10 +24,17 @@ MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mong
 const PORT = 5000
 
 APP.get("/", (req, res) => {
-    res.send("Hello world!")
+    res.sendFile(__dirname + "/index.html")
 })
 
-APP.listen(PORT, () => {
+IO.on("connection", (socket) => {
+    console.log(`User connected.`)
+    socket.on(`Chat message`, msg => {
+        IO.emit(`Chat message`, msg)
+    })
+})
+
+SERVER.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}.`)
 })
 
