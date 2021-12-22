@@ -4,6 +4,7 @@ const MONGOOSE = require("mongoose")
 const EXPRESS = require("express")
 const { Server } = require("socket.io")
 const HTTP = require("http")
+const MESSAGE = require("./Models/messages")
 
 require("dotenv").config()
 
@@ -17,7 +18,7 @@ const IO = new Server(SERVER)
 
 require("./Models/users")(APP)
 
-MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`)
+MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true})
         .then(() => console.log(`Authentication successful.`))
         .catch(error => console.error(`Unexpected error.`, error))
 
@@ -27,10 +28,16 @@ APP.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html")
 })
 
-IO.on("connection", (socket) => {
+IO.on("connection", socket => {
     console.log(`User connected.`)
     socket.on(`Chat message`, msg => {
-        IO.emit(`Chat message`, msg)
+        const MESSAGES = new MESSAGE({message: msg})
+        MESSAGES.save().then(() => {
+            IO.emit(`Chat message`, msg) 
+        })        
+    })
+    socket.on(`disconnect`, () => {
+        console.log(`User disconnected.`)
     })
 })
 
