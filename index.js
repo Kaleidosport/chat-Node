@@ -3,7 +3,6 @@
 const MONGOOSE = require("mongoose")
 const EXPRESS = require("express")
 const { Server } = require("socket.io")
-const HTTP = require("http")
 const MESSAGE = require("./Models/messages")
 
 require("dotenv").config()
@@ -13,17 +12,18 @@ const MONGO_PW = process.env.MONGO_PW
 const MONGO_DB = process.env.MONGO_DB
 
 const APP = EXPRESS()
-const SERVER = HTTP.createServer(APP)
+const SERVER = require("http").createServer(APP)
 const IO = new Server(SERVER)
 
 require("./Models/users")(APP)
 
-MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true})
+MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`)
         .then(() => console.log(`Authentication successful.`))
         .catch(error => console.error(`Unexpected error.`, error))
 
 const PORT = 5000
 
+APP.use("/Views", EXPRESS.static("./Views"))
 APP.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html")
 })
