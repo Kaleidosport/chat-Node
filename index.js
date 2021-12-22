@@ -25,7 +25,7 @@ const PORT = 5000
 
 APP.use("/Views", EXPRESS.static("./Views"))
 APP.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html")
+    res.sendFile(__dirname + "/Views/index.html")
 })
 
 IO.on("connection", socket => {
