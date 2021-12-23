@@ -4,6 +4,7 @@ const MONGOOSE = require("mongoose")
 const EXPRESS = require("express")
 const { Server } = require("socket.io")
 const MESSAGE = require("./Models/messages")
+const FORMAT = require("./Utils/format")
 
 require("dotenv").config()
 
@@ -24,39 +25,30 @@ MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mong
 const PORT = 5000
 
 APP.use("/Views", EXPRESS.static("./Views"))
-APP.get("/", (req, res) => {
-    res.sendFile(__dirname + "/Views/index.html")
-})
-
-let nicknames = []
+APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/index.html"))
 
 IO.on("connection", socket => {
     console.log(`User connected.`)
+    socket.emit(`Message`, FORMAT(`🤖 Bossun`, `Welcome to the one and only Rad.io chat!`))
+
     MESSAGE.find({})
            .sort({createdAt: -1})
-           .limit(10)
+           .limit(14)
            .then(messages => socket.emit(`Load previous messages`, messages.reverse())
            ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
-    socket.on(`New user`, data => {
-        socket.nickname = data
-        console.log(data)
-        nicknames.push(socket.nickname)
-        console.log(nicknames)
-        IO.sockets.emit(`usernames`, nicknames)
-    })
+
+    socket.broadcast.emit(`Message`, FORMAT(`🤖 Bossun`, `A user has joined the party.`))
+
     socket.on(`Chat message`, msg => {
         const MESSAGES = new MESSAGE({message: msg})
         MESSAGES.save().then(() => IO.emit(`Chat message`, msg) 
         )        
     })
-    socket.on(`disconnect`, () => {
-        console.log(`User disconnected.`)
-    })
+
+    socket.on(`disconnect`, () => IO.emit(`Message`, FORMAT(`🤖 Bossun`, `A user has left the party.`)))
 })
 
-SERVER.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}.`)
-})
+SERVER.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}.`))
 
 /* Where we at: 
  *

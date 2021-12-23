@@ -11,11 +11,7 @@ let lastTenMessages = message => {
     messages.prepend(item)
 }
 
-socket.on(`Load previous messages`, data => {
-    data.sort((a, b) => a.time < b.time).forEach(message => { // reverse()? >, < or - for sort()???
-        lastTenMessages(message)
-    })
-})
+socket.on(`Load previous messages`, data => data.sort((a, b) => a.time < b.time).forEach(message => lastTenMessages(message)))
 
 // socket.on(`New user`, data => {
 //     let user = document.createElement("li")
@@ -28,13 +24,23 @@ form.addEventListener("submit", e => {
     if (input.value) {
         socket.emit("Chat message", input.value)
         input.value = ""
+        input.focus()
     }
 })
 
 socket.on("Chat message", msg => {
+    console.log(msg)
     let item = document.createElement("li")
     let date = new Date().toLocaleString("en-BE")
     item.textContent = `${date} - ${msg}`
     messages.appendChild(item)
     window.scrollTo(0, document.body.scrollHeight)
+})
+
+socket.on(`Message`, msg => {
+    console.log(msg)
+    let item = document.createElement("li")
+    item.innerHTML = `<b><span style="color:crimson;">${msg.username}:</span></b> ${msg.content}`
+    messages.appendChild(item)
+    messages.scrollTop = messages.scrollHeight
 })
