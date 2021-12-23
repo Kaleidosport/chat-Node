@@ -1,0 +1,58 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+
+
+.gradient-custom {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size:cover;
+    /* fallback for old browsers */
+  }
+img {
+  margin-top: -300px;
+  width: 115%;
+}
+
+label {
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  color: rgb(255, 123, 0);
+}
+
+.card-body {
+  background-color: rgb(86, 121, 161);
+  border-radius: 50px;
+  border: solid 20px;
+  border-color: rgb(207, 207, 207);
+}
+
+.btn {
+  color: rgb(255, 123, 0);
+  border-radius: 10px;
+  border: solid 2px white;
+  font-size: 25px;
+  font-family: 'Bangers', cursive;
+}
+
+:hover .btn {
+  font-size: 29px;
+}
+
+#contentWrap {
+  display: none;
+
+}
+
+#carduser  {
+  display: none;
+}
+
+h1 {
+  margin-top: -100px;
+  font-size: 26px;
+  font-family: 'Bangers', cursive;
+}
+
+body {
+  background-image: url(./asset/img/thumb-1920-740615.png);
+}
