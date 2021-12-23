@@ -28,6 +28,8 @@ APP.get("/", (req, res) => {
     res.sendFile(__dirname + "/Views/index.html")
 })
 
+let nicknames = []
+
 IO.on("connection", socket => {
     console.log(`User connected.`)
     MESSAGE.find({})
@@ -35,6 +37,12 @@ IO.on("connection", socket => {
            .limit(10)
            .then(messages => socket.emit(`Load previous messages`, messages.reverse())
            ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
+    socket.on(`New user`, data => {
+        socket.nickname = data
+        nicknames.push(socket.nickname)
+        console.log(nicknames)
+        IO.sockets.emit(`usernames`, nicknames)
+    })
     socket.on(`Chat message`, msg => {
         const MESSAGES = new MESSAGE({message: msg})
         MESSAGES.save().then(() => IO.emit(`Chat message`, msg) 

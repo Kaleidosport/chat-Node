@@ -5,6 +5,19 @@ const MESSAGESCHEMA = new MONGOOSE.Schema({
         type: String,
         maxlength: 280,
         required: true
+    },
+    username: {
+        type: String,
+        minlength: 3,
+        maxlength: 24,
+        match: /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/,
+        default: "Guest",
+        required: true
+    },
+    time: {
+        type: Date,
+        default: Date.now(),
+        required: true
     }
 })
 
