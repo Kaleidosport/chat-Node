@@ -6,7 +6,8 @@ let input = document.getElementById("input")
 
 let lastTenMessages = message => {
     let item = document.createElement("li")
-    item.innerText = `${message.time} - ${message.message}`
+    let date = new Date(message.time).toLocaleString("en-BE")
+    item.innerText = `${date} - ${message.message}`
     messages.prepend(item)
 }
 
