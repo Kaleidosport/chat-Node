@@ -4,6 +4,18 @@ let messages = document.getElementById("messages")
 let form = document.getElementById("form")
 let input = document.getElementById("input")
 
+let lastTenMessages = message => {
+    let item = document.createElement("li")
+    item.innerText = message.message
+    messages.prepend(item)
+}
+
+socket.on(`Load previous messages`, data => {
+    data.sort((a, b) => a._id < b._id).forEach(message => { // reverse()? >, < or - for sort()???
+        lastTenMessages(message)
+    })
+})
+
 form.addEventListener("submit", e => {
     e.preventDefault()
     if (input.value) {

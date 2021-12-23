@@ -30,11 +30,15 @@ APP.get("/", (req, res) => {
 
 IO.on("connection", socket => {
     console.log(`User connected.`)
+    MESSAGE.find({})
+           .sort({createdAt: -1})
+           .limit(10)
+           .then(messages => socket.emit(`Load previous messages`, messages.reverse())
+           ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
     socket.on(`Chat message`, msg => {
         const MESSAGES = new MESSAGE({message: msg})
-        MESSAGES.save().then(() => {
-            IO.emit(`Chat message`, msg) 
-        })        
+        MESSAGES.save().then(() => IO.emit(`Chat message`, msg) 
+        )        
     })
     socket.on(`disconnect`, () => {
         console.log(`User disconnected.`)
@@ -52,5 +56,7 @@ SERVER.listen(PORT, () => {
  * https://nodejs.org/en/docs/
  * https://socket.io/get-started/chat/
  * https://docs.mongodb.com/
+ * 
+ * Page 371
  * 
  */
