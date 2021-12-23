@@ -15,8 +15,8 @@ const MESSAGESCHEMA = new MONGOOSE.Schema({
         required: true
     },
     time: {
-        type: Date,
-        default: Date.now(),
+        type: String,
+        default: new Date().toLocaleString("en-BE"),
         required: true
     }
 })

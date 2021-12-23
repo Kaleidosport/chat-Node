@@ -35,10 +35,11 @@ IO.on("connection", socket => {
     MESSAGE.find({})
            .sort({createdAt: -1})
            .limit(10)
-           .then(messages => socket.emit(`Load previous messages`, messages.reverse())
+           .then(messages => socket.emit(`Load previous messages`, messages)
            ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
     socket.on(`New user`, data => {
         socket.nickname = data
+        console.log(data)
         nicknames.push(socket.nickname)
         console.log(nicknames)
         IO.sockets.emit(`usernames`, nicknames)
