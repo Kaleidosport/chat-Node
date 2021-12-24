@@ -34,10 +34,10 @@ IO.on("connection", socket => {
     console.log(`User connected.`)
 
     MESSAGE.find({})
-           .sort({createdAt: -1})
+           .sort({"_id": "desc"}) // Better than createdAt: -1 
            .limit(14)
-           .then(messages => socket.emit(`Load previous messages`, messages.reverse())
-           ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
+           .then(messages => socket.emit(`Load previous messages`, messages)
+           ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome with createdAt: -1...
 
     socket.on(`Newcomer`, username => {
         const USER = JOINING(socket.id, username)
@@ -48,8 +48,11 @@ IO.on("connection", socket => {
     })
 
     socket.on(`Chat message`, msg => {
-        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg)})
-        MESSAGES.save().then(() => IO.emit(`Chat message`, CENSORSHIP(msg)) 
+        const USER = GETUSER(socket.id)
+        console.log(msg)
+        console.log(USER)
+        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg), username: USER.username})
+        MESSAGES.save().then(() => IO.emit(`Chat message`, FORMAT(USER.username, CENSORSHIP(msg))) 
         )        
     })
 })

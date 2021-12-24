@@ -5,17 +5,17 @@ let form = document.getElementById("form")
 let input = document.getElementById("input")
 
 const username = window.location.search.substring(1).slice(9).replace(`+`, ` `)
-console.log(username) // https://www.youtube.com/watch?v=jD7FnbI76Hg 36:12
+console.log(username)
 socket.emit(`Newcomer`, username)
 
 let lastTenMessages = message => {
     let item = document.createElement("li")
     let date = new Date(message.time).toLocaleString("en-BE")
-    item.innerText = `${date} - ${message.message}`
+    item.innerText = `${date} - ${message.username}: ${message.message}`
     messages.prepend(item)
 }
 
-socket.on(`Load previous messages`, data => data.sort((a, b) => a.time < b.time).forEach(message => lastTenMessages(message)))
+socket.on(`Load previous messages`, data => data.sort((a, b) => a._id < b._id).forEach(message => lastTenMessages(message)))
 
 // socket.on(`New user`, data => {
 //     let user = document.createElement("li")
@@ -34,9 +34,11 @@ form.addEventListener("submit", e => {
 
 socket.on("Chat message", msg => {
     console.log(msg)
+    console.log(msg.content)
+    console.log(msg.username)
     let item = document.createElement("li")
     let date = new Date().toLocaleString("en-BE")
-    item.textContent = `${date} - ${msg}`
+    item.textContent = `${date} - ${msg.username}: ${msg.content}`
     messages.appendChild(item)
     window.scrollTo(0, document.body.scrollHeight)
 })
