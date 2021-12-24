@@ -4,6 +4,9 @@ const MONGOOSE = require("mongoose")
 const EXPRESS = require("express")
 const { Server } = require("socket.io")
 const MESSAGE = require("./Models/messages")
+const FORMAT = require("./Utils/format")
+const CENSORSHIP = require("./Utils/censor")
+const { JOINING, GETUSER } = require("./Utils/actions")
 
 require("dotenv").config()
 
@@ -24,39 +27,37 @@ MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mong
 const PORT = 5000
 
 APP.use("/Views", EXPRESS.static("./Views"))
-APP.get("/", (req, res) => {
-    res.sendFile(__dirname + "/Views/index.html")
-})
-
-let nicknames = []
+APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/signin.html"))
+APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/index.html"))
 
 IO.on("connection", socket => {
     console.log(`User connected.`)
+
     MESSAGE.find({})
-           .sort({createdAt: -1})
-           .limit(10)
-           .then(messages => socket.emit(`Load previous messages`, messages.reverse())
-           ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
-    socket.on(`New user`, data => {
-        socket.nickname = data
-        console.log(data)
-        nicknames.push(socket.nickname)
-        console.log(nicknames)
-        IO.sockets.emit(`usernames`, nicknames)
+           .sort({"_id": "desc"}) // Better than createdAt: -1 
+           .limit(14)
+           .then(messages => socket.emit(`Load previous messages`, messages)
+           ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome with createdAt: -1...
+
+    socket.on(`Newcomer`, username => {
+        const USER = JOINING(socket.id, username)
+        console.log(USER)
+        socket.emit(`Message`, FORMAT(`🤖 Bossun`, `Welcome to the one and only Rad.io chat, ${USER.username}!`))
+        socket.broadcast.emit(`Message`, FORMAT(`🤖 Bossun`, `${USER.username} has joined the party.`))
+        socket.on(`disconnect`, () => IO.emit(`Message`, FORMAT(`🤖 Bossun`, `${USER.username} has left the party.`)))
     })
+
     socket.on(`Chat message`, msg => {
-        const MESSAGES = new MESSAGE({message: msg})
-        MESSAGES.save().then(() => IO.emit(`Chat message`, msg) 
+        const USER = GETUSER(socket.id)
+        console.log(msg)
+        console.log(USER)
+        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg), username: USER.username})
+        MESSAGES.save().then(() => IO.emit(`Chat message`, FORMAT(USER.username, CENSORSHIP(msg))) 
         )        
-    })
-    socket.on(`disconnect`, () => {
-        console.log(`User disconnected.`)
     })
 })
 
-SERVER.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}.`)
-})
+SERVER.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}.`))
 
 /* Where we at: 
  *
