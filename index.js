@@ -5,6 +5,8 @@ const EXPRESS = require("express")
 const { Server } = require("socket.io")
 const MESSAGE = require("./Models/messages")
 const FORMAT = require("./Utils/format")
+const CENSORSHIP = require("./Utils/censor")
+const { JOINING, GETUSER } = require("./Utils/actions")
 
 require("dotenv").config()
 
@@ -25,11 +27,11 @@ MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mong
 const PORT = 5000
 
 APP.use("/Views", EXPRESS.static("./Views"))
+APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/signin.html"))
 APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/index.html"))
 
 IO.on("connection", socket => {
     console.log(`User connected.`)
-    socket.emit(`Message`, FORMAT(`🤖 Bossun`, `Welcome to the one and only Rad.io chat!`))
 
     MESSAGE.find({})
            .sort({createdAt: -1})
@@ -37,15 +39,19 @@ IO.on("connection", socket => {
            .then(messages => socket.emit(`Load previous messages`, messages.reverse())
            ) // Oddly enough, reverse() was key to get the same order on FireFox & Chrome...
 
-    socket.broadcast.emit(`Message`, FORMAT(`🤖 Bossun`, `A user has joined the party.`))
-
-    socket.on(`Chat message`, msg => {
-        const MESSAGES = new MESSAGE({message: msg})
-        MESSAGES.save().then(() => IO.emit(`Chat message`, msg) 
-        )        
+    socket.on(`Newcomer`, username => {
+        const USER = JOINING(socket.id, username)
+        console.log(USER)
+        socket.emit(`Message`, FORMAT(`🤖 Bossun`, `Welcome to the one and only Rad.io chat, ${USER.username}!`))
+        socket.broadcast.emit(`Message`, FORMAT(`🤖 Bossun`, `${USER.username} has joined the party.`))
+        socket.on(`disconnect`, () => IO.emit(`Message`, FORMAT(`🤖 Bossun`, `${USER.username} has left the party.`)))
     })
 
-    socket.on(`disconnect`, () => IO.emit(`Message`, FORMAT(`🤖 Bossun`, `A user has left the party.`)))
+    socket.on(`Chat message`, msg => {
+        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg)})
+        MESSAGES.save().then(() => IO.emit(`Chat message`, CENSORSHIP(msg)) 
+        )        
+    })
 })
 
 SERVER.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}.`))

@@ -4,6 +4,10 @@ let messages = document.getElementById("messages")
 let form = document.getElementById("form")
 let input = document.getElementById("input")
 
+const username = window.location.search.substring(1).slice(9).replace(`+`, ` `)
+console.log(username) // https://www.youtube.com/watch?v=jD7FnbI76Hg 36:12
+socket.emit(`Newcomer`, username)
+
 let lastTenMessages = message => {
     let item = document.createElement("li")
     let date = new Date(message.time).toLocaleString("en-BE")
