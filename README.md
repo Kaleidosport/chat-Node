@@ -7,7 +7,7 @@
 **Contributors:** [Anthony Lambert](https://github.com/Kaleidosport), [Romain Berthaux](https://github.com/kawtagan) and [Jean-Louis Houdret](https://github.com/houdret).  
 **Subject:** Concluding group assignment within the scope of the Junior WebDev's training provided by [BeCode](https://github.com/becodeorg), NodeJS's latest bundle.  
 **Start date:** December 17th 2021.  **End date:** December 24th 2021?  
-**Self-hosted release:** Coming soon.     
+**Self-hosted release:** [Radio Manganime](https://radio-manganime.herokuapp.com/) => WIP.       
   
 ## Learning objectives  
 > Working together toward a common vision.
