@@ -10,10 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
     <!-- Additional CSS -->
-    <!-- <link rel="stylesheet" href="./Assets/style.css" /> -->
+    <link rel="stylesheet" href="/Views/CSS/signin.css">
 
     <!-- Additional font -->
      
@@ -23,19 +23,23 @@
     
     <header>
     <!-- Title & branding -->
-      <h1 class="container-fluid text-center bg-dark text-warning fs-2">
+      <h1 class="container-fluid text-center bg-dark text-star fs-2">
         WELCOME TO RAD.IO
       </h1>
     </header>
 
     <main class="join-main">
-        <form action="/Views/index.html">
-            <div class="form-control">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="Enter username..." required/>
-            </div>
-            <button type="submit" class="btn">Login</button>
-        </form>
+      <section class="vh-85 d-flex justify-content-center align-items-center">
+        <section class="col-8 col-md-4 border border-4 border-danger rounded-3 px-3 py-2 bg-light">
+          <form action="/Views/index.html">
+            <h3 class="mb-4 text-center text-star text-uppercase fw-bold"><span class="bg-secondary bg-opacity-25 px-1 pb-1">Join the party!</span></h3>
+            <label for="username" class="form-label">Username</label>
+            <div class="mb-2 col"><input type="text" class="form-control" name="username" id="username" placeholder="Enter your username..." autocomplete="off" minlength="3" maxlength="24" size="36" required/>
+            <div class="form-text mb-3">3-24 characters long: letters and numbers.</div></div>
+            <div class="text-center"><button type="submit" class="btn btn-danger w-50 text-uppercase fs-4">Login</button></div>
+          </form>
+        </section>
+      </section>
     </main>
 
   </body>
