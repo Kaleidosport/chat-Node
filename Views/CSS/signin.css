@@ -28,4 +28,8 @@ body {
 .btn-danger:hover, .btn-danger:active {
   background-color: #850814;
 }
+
+.form-text, .form-control {
+  font-family: Arial, "sans-serif";
+}
 /*# sourceMappingURL=signin.css.map */

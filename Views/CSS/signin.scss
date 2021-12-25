@@ -32,3 +32,7 @@ body {
 .btn-danger:hover, .btn-danger:active {
     background-color: $darkdanger;
 }
+
+.form-text, .form-control {
+    font-family: Arial, "sans-serif";
+}
