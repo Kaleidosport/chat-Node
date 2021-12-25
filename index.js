@@ -20,7 +20,7 @@ const IO = new Server(SERVER)
 
 require("./Models/users")(APP)
 
-MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`)
+MONGOOSE.connect(process.env.MONGODB_URI || `mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mongodb.net/rtc?retryWrites=true&w=majority`)
         .then(() => console.log(`Authentication successful.`))
         .catch(error => console.error(`Unexpected error.`, error))
 
