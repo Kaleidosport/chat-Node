@@ -51,7 +51,7 @@ IO.on("connection", socket => {
         const USER = GETUSER(socket.id)
         console.log(msg)
         console.log(USER)
-        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg), username: USER.username})
+        const MESSAGES = new MESSAGE({message: CENSORSHIP(msg), username: USER.username, time:new Date()})
         MESSAGES.save().then(() => IO.emit(`Chat message`, FORMAT(USER.username, CENSORSHIP(msg))) 
         )        
     })
