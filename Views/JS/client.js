@@ -11,7 +11,7 @@ socket.emit(`Newcomer`, username)
 let lastTenMessages = message => {
     let item = document.createElement("li")
     let date = new Date(message.time).toLocaleString("en-BE")
-    item.innerText = `${date} - ${message.username}: ${message.message}`
+    item.innerHTML = `<span class="fs-7"><span class="fw-light">${date}</span> - <span class="fw-bold">${message.username}</span></span><br/> ${message.message}`
     messages.prepend(item)
 }
 
@@ -38,7 +38,7 @@ socket.on("Chat message", msg => {
     console.log(msg.username)
     let item = document.createElement("li")
     let date = new Date().toLocaleString("en-BE")
-    item.textContent = `${date} - ${msg.username}: ${msg.content}`
+    item.innerHTML = `<span class="fs-7"><span class="fw-light">${date}</span> - <span class="fw-bold">${msg.username}</span></span><br/> ${msg.content}`
     messages.appendChild(item)
     window.scrollTo(0, document.body.scrollHeight)
 })
@@ -46,7 +46,7 @@ socket.on("Chat message", msg => {
 socket.on(`Message`, msg => {
     console.log(msg)
     let item = document.createElement("li")
-    item.innerHTML = `<b><span style="color:crimson;">${msg.username}:</span></b> ${msg.content}`
+    item.innerHTML = `<span class="fw-bold text-danger">${msg.username}:</span> ${msg.content}`
     messages.appendChild(item)
     messages.scrollTop = messages.scrollHeight
 })
