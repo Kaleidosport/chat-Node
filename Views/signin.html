@@ -28,13 +28,12 @@
       </h1>
     </header>
 
-    <main class="join-main">
+    <main class="join-main ps-3">
         <form action="/Views/index.html">
-            <div class="form-control">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="Enter username..." required/>
-            </div>
-            <button type="submit" class="btn">Login</button>
+            <div class="mb-1"><label for="username" class="form-label">Username</label></div>
+            <div class="mb-2 col-3"><input type="text" class="form-control" name="username" id="username" placeholder="Enter username..." required/>
+            <div class="form-text">3-24 characters long. Underscores, spaces and dashes are allowed to a lesser extent.</div></div>
+            <button type="submit" class="btn btn-danger">Login</button>
         </form>
     </main>
 
