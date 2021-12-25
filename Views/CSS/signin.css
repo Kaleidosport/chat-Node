@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Luckiest+Guy&display=swap");
+.text-star {
+  color: #F5AB33;
+}
+
+.border-star {
+  border-color: #F5AB33 !important;
+}
+
+body {
+  background-image: url(/Views/Images/thumb-1920-740615.png);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: "Luckiest Guy", cursive;
+}
+
+.vh-85 {
+  height: 85vh !important;
+}
+
+.btn:focus, .btn-danger:focus, .btn-danger:active, .btn:active {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.btn-danger:hover, .btn-danger:active {
+  background-color: #850814;
+}
+/*# sourceMappingURL=signin.css.map */
