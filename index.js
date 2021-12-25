@@ -24,7 +24,7 @@ MONGOOSE.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_DB}.5c5eb.mong
         .then(() => console.log(`Authentication successful.`))
         .catch(error => console.error(`Unexpected error.`, error))
 
-const PORT = 5000
+const PORT = process.env.PORT || 5000
 
 APP.use("/Views", EXPRESS.static("./Views"))
 APP.get("/", (req, res) => res.sendFile(__dirname + "/Views/signin.html"))
